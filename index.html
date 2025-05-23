@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Приглашение на 60-летие (Корея)</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap&subset=cyrillic"
+          rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            font-family: 'Playfair Display', serif;
+            position: relative;
+        }
+
+        #bg-video {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .open #bg-video { opacity: 1; }
+
+        .gate {
+            position: fixed;
+            top: 0;
+            width: 50%; height: 100vh;
+            background-size: cover;
+            background-position: center;
+            transition: transform 1s ease;
+            z-index: 2;
+        }
+        .gate-left  { left: 0; background-image: url('gate_left-2.png'); }
+        .gate-right { right: 0; background-image: url('gate_right-2.png'); }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.4);
+            z-index: 3;
+        }
+        .overlay.hidden { display: none; }
+        .btn {
+            font-family: 'Playfair Display', cursive;
+            font-size: 1.5rem;
+            background: #D4AF37;
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+            z-index: 4;
+        }
+        .btn:hover { transform: scale(1.05); }
+
+        .burst {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle,
+            rgba(255,215,0,0.5) 0%,
+            rgba(255,215,0,0) 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            z-index: 5;
+        }
+        .burst.show { animation: burstAnim 0.8s forwards; }
+        @keyframes burstAnim {
+            0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+        }
+
+        .content {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            max-width: 80%;
+            padding: 30px;
+            background: #fff;               /* непрозрачный фон */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            z-index: 6;                     /* поверх confetti и burst */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .content.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .content h1 {
+            font-size: 2.5rem;
+            color: #C8102E;
+            margin-bottom: 0.5em;
+        }
+        .content .details {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .content .details p {
+            margin: 0.2em 0;
+            font-size: 1rem;
+        }
+        .content p {
+            margin-bottom: 1em;
+            line-height: 1.6;
+            text-align: center;
+        }
+        /* Центрируем ссылку */
+        .content p.center {
+            text-align: center;
+        }
+        .content a {
+            color: #C8102E;
+            text-decoration: none;
+            font-weight: bold;
+            pointer-events: auto;
+            display: inline-block;
+        }
+        .content a:hover { text-decoration: underline; }
+
+        /* Анимация открытия ворот */
+        .open .gate-left  { transform: translateX(-100%); }
+        .open .gate-right { transform: translateX(100%); }
+    </style>
+</head>
+<body>
+<audio id="bg-music" src="hb.mp3" autoplay loop></audio>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const music = document.getElementById('bg-music');
+        if (music) music.volume = 0.2;
+    });
+</script>
+
+<video id="bg-video" src="gate_placeholder.mp4" autoplay loop muted playsinline></video>
+<div class="gate gate-left"></div>
+<div class="gate gate-right"></div>
+
+<div class="overlay" id="overlay">
+    <button class="btn" id="open-gate">Открыть приглашение</button>
+</div>
+
+<div class="burst" id="burst"></div>
+
+<div class="content" id="content">
+    <h1>Приглашаем на 60-летие Хангаби!</h1>
+    <div class="details">
+        <p><strong>Дата:</strong> 20 сентября в 17:00</p>
+        <p><strong>Место:</strong> Royal Rose</p>
+    </div>
+    <p class="center">
+        <a href="https://2gis.kz/almaty/geo/70000001093728642"
+           target="_blank" rel="noopener">
+            Посмотреть на 2GIS
+        </a>
+    </p>
+    <p>Приглашаем вас на особенный вечер, полный радости, света и душевного тепла.</p>
+    <p>Нам важно, чтобы рядом были именно вы — со своим сиянием и добротой.</p>
+    <p>Мы ждём вас в праздничной атмосфере, где главное украшение — ваше прекрасное настроение!</p>
+    <p>До скорой встречи!</p>
+</div>
+
+<script>
+    const openBtn = document.getElementById('open-gate');
+    const overlay = document.getElementById('overlay');
+    const burst   = document.getElementById('burst');
+    const content = document.getElementById('content');
+
+    openBtn.addEventListener('click', () => {
+        // Одноразовый взрыв конфетти
+        confetti({ particleCount: 200, spread: 70, origin: { y: 0.4 } });
+
+        // Непрерывный дождь конфетти
+        const confettiInterval = setInterval(() => {
+            confetti({
+                particleCount: 20,
+                startVelocity: 30,
+                spread: 360,
+                ticks: 60,
+                origin: { x: Math.random(), y: 0 }
+            });
+        }, 300);
+
+        document.body.classList.add('open');
+        overlay.classList.add('hidden');
+        burst.classList.add('show');
+        setTimeout(() => {
+            content.classList.add('show');
+        }, 1000);
+    });
+</script>
+</body>
+</html>
