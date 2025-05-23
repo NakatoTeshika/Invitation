@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Приглашение на 60-летие (Корея)</title>
+    <title>Приглашение на 60-летие</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap&subset=cyrillic"
           rel="stylesheet">
@@ -100,12 +100,12 @@
             transform: translate(-50%, -50%) scale(0.9);
             max-width: 80%;
             padding: 30px;
-            background: #fff;               /* непрозрачный фон */
+            background: #fff;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             border-radius: 10px;
             font-family: 'Playfair Display', serif;
             text-align: center;
-            z-index: 6;                     /* поверх confetti и burst */
+            z-index: 6;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.8s ease, transform 0.8s ease;
@@ -133,7 +133,6 @@
             line-height: 1.6;
             text-align: center;
         }
-        /* Центрируем ссылку */
         .content p.center {
             text-align: center;
         }
@@ -195,10 +194,8 @@
     const content = document.getElementById('content');
 
     openBtn.addEventListener('click', () => {
-        // Одноразовый взрыв конфетти
         confetti({ particleCount: 200, spread: 70, origin: { y: 0.4 } });
 
-        // Непрерывный дождь конфетти
         const confettiInterval = setInterval(() => {
             confetti({
                 particleCount: 20,
