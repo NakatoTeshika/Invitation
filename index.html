@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:title" content="Приглашение" />
+    <meta property="og:description" content="Приглашаем вас на особенный вечер, полный радости, света и душевного тепла." />
+    <meta property="og:image" content="https://invitation-gy53.onrender.com/invitation.png" />
+    <meta property="og:url" content="https://invitation-gy53.onrender.com/" />
+    <meta property="og:type" content="website" />
     <title>Приглашение на 60-летие</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap&subset=cyrillic"
@@ -44,7 +51,7 @@
             width: 50%; height: 100vh;
             background-size: cover;
             background-position: center;
-            transition: transform 1s ease;
+            transition: transform 2s ease;
             z-index: 2;
         }
         .gate-left  { left: 0; background-image: url('gate_left-2.png'); }
@@ -100,12 +107,12 @@
             transform: translate(-50%, -50%) scale(0.9);
             max-width: 80%;
             padding: 30px;
-            background: #fff;
+            background: #fff;               /* непрозрачный фон */
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             border-radius: 10px;
             font-family: 'Playfair Display', serif;
             text-align: center;
-            z-index: 6;
+            z-index: 6;                     /* поверх confetti и burst */
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.8s ease, transform 0.8s ease;
@@ -133,6 +140,7 @@
             line-height: 1.6;
             text-align: center;
         }
+        /* Центрируем ссылку */
         .content p.center {
             text-align: center;
         }
@@ -148,6 +156,33 @@
         /* Анимация открытия ворот */
         .open .gate-left  { transform: translateX(-100%); }
         .open .gate-right { transform: translateX(100%); }
+
+        @media (max-width: 600px) {
+            .content {
+                /* Занимает почти всю ширину экрана */
+                width: 95vw;            /* вместо max-width:95% */
+                max-width: 400px;       /* дополнительно ограничим максимальную ширину (по желанию) */
+
+                /* Не растягиваемся по высоте больше 90% экрана */
+                max-height: 90vh;
+                overflow-y: auto;       /* появится скролл, если контент выше 90% высоты viewport */
+
+                padding: 20px;
+            }
+
+            .content h1 {
+                font-size: 1.8rem;
+            }
+            .content .details p,
+            .content p {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+            .btn {
+                font-size: 1.2rem;
+                padding: 12px 30px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -194,8 +229,10 @@
     const content = document.getElementById('content');
 
     openBtn.addEventListener('click', () => {
+        // Одноразовый взрыв конфетти
         confetti({ particleCount: 200, spread: 70, origin: { y: 0.4 } });
 
+        // Непрерывный дождь конфетти
         const confettiInterval = setInterval(() => {
             confetti({
                 particleCount: 20,
